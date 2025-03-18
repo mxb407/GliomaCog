@@ -85,7 +85,7 @@
     input[type="checkbox"] {
       margin-right: 8px;
     }
-    /* Submit Button - bigger */
+    /* Submit Button - bigger and fully horizontal */
     button[type="submit"] {
       background-color: #0077b6;
       color: #fff;
@@ -267,304 +267,446 @@
     });
 
     /***************************************************************
-     * 2. MASTER EXPLANATIONS (FULL LENGTH)
+     * 2. MASTER EXPLANATIONS (FULL LENGTH, including DMN)
      ***************************************************************/
     const masterExplanations = {
-      "Central Executive Network (CEN)": {
-        Frontal: `
-          Gliomas in the frontal cortex frequently disrupt the fronto-parietal CEN, leading to executive
-          dysfunction (planning, decision-making, working memory). Tumors in the lateral frontal cortex
-          (especially dorsolateral prefrontal regions) often impair planning and working memory. For example,
-          patients with left frontal gliomas show deficits in verbal working memory, while right frontal
-          lesions might affect non-verbal executive tasks. Medial frontal tumors (e.g., anterior cingulate)
-          are less directly involved in the CEN, but large medial lesions can indirectly affect executive
-          circuits by disconnecting frontal-subcortical loops.
-        `,
-        Parietal: `
-          The parietal cortex (angular gyrus, intraparietal sulcus) is also a key node in the fronto-parietal
-          CEN. Damage here reduces fluid intelligence and multi-demand cognitive processes. Neuropsychological
-          lesion-mapping studies confirm that parietal lobe lesions often correlate with working memory
-          deficits and problem-solving impairments (Woolgar et al., 2010).
-        `,
-        Temporal: `
-          Purely temporal lobe lesions typically spare the core CEN unless they extend into fronto-parietal
-          junctions. Large temporal tumors might cause indirect executive difficulties by affecting connectivity
-          with frontal or parietal regions, leading to mental flexibility or decision-making deficits.
-        `,
-        Occipital: `
-          Occipital involvement usually spares the CEN, though extensive lesions that encroach on parietal
-          territory can partially affect executive function. Diffuse connectivity changes might degrade
-          fronto-parietal network efficiency even when the primary lesion is posterior.
-        `
-      },
-      "Language Network": {
-        Frontal: `
-          Left lateral frontal tumors (particularly involving Broca’s area in the inferior frontal gyrus)
-          commonly cause expressive aphasia or word-finding difficulties...
-        `,
-        Parietal: `
-          The dominant (usually left) parietal lobe, especially the angular and supramarginal gyri, supports
-          reading, writing, and naming...
-        `,
-        Temporal: `
-          In the dominant temporal lobe (superior temporal gyrus, Wernicke’s area), tumors frequently
-          cause receptive aphasia or impaired language comprehension...
-        `,
-        Occipital: `
-          Occipital tumors rarely affect the core language network unless they extend into the splenium
-          of the corpus callosum or occipitotemporal regions...
-        `
-      },
-      "Sensorimotor Network": {
-        Frontal: `
-          Tumors near the precentral gyrus (primary motor cortex) produce contralateral weakness or slowed
-          fine motor skills. A parasagittal (medial frontal) lesion might cause leg motor deficits...
-        `,
-        Parietal: `
-          The postcentral gyrus is the primary somatosensory cortex. Parietal tumors encroaching on this area
-          cause contralateral numbness, sensory loss, or sensory seizures...
-        `,
-        Temporal: `
-          Temporal lobe tumors seldom disrupt sensorimotor pathways unless they expand into the rolandic region...
-        `,
-        Occipital: `
-          Occipital gliomas generally spare the sensorimotor strip unless they extend forward into parietal
-          territory near the central sulcus...
-        `
-      },
-      "Visual Network": {
-        Frontal: `
-          Frontal lesions may affect the frontal eye fields (voluntary gaze control) but seldom produce
-          homonymous field cuts unless parietal or occipital pathways are involved...
-        `,
-        Parietal: `
-          The parietal lobe is part of the dorsal visual stream (“where” pathway), crucial for spatial vision...
-        `,
-        Temporal: `
-          The ventral visual stream (occipitotemporal) can be compromised if temporal lesions invade the fusiform
-          or inferior temporal gyrus...
-        `,
-        Occipital: `
-          Occipital gliomas typically cause homonymous hemianopia or quadrantanopia if the primary visual cortex
-          is involved...
-        `
-      },
-      "Salience Network": {
-        Frontal: `
-          Medial frontal tumors involving the anterior cingulate cortex (ACC) frequently disrupt the salience
-          network, leading to apathy, impaired motivation, or personality changes...
-        `,
-        Parietal: `
-          Parietal lobe involvement in the salience network is indirect. Large medial parietal tumors might
-          affect default mode–salience interactions...
-        `,
-        Temporal: `
-          Temporal lobe tumors usually spare core salience nodes unless they invade the insula...
-        `,
-        Occipital: `
-          Occipital lesions are far from the ACC or insula...
-        `
-      },
-      "Dorsal Attention Network (DAN)": {
-        Frontal: `
-          The frontal eye fields (FEF) are a key DAN node. A lateral frontal tumor affecting the FEF may slow
-          top-down attention and voluntary saccades...
-        `,
-        Parietal: `
-          Parietal lesions (superior parietal lobule, intraparietal sulcus) frequently impair spatial orientation,
-          visual search, and sustained attention...
-        `,
-        Temporal: `
-          Pure temporal tumors rarely disrupt DAN unless they extend into the parietal junction...
-        `,
-        Occipital: `
-          Occipital involvement can degrade visual input, indirectly affecting the DAN’s ability to orient...
-        `
-      },
-      "Ventral Attention Network (VAN)": {
-        Frontal: `
-          The VAN is predominantly right-lateralized in the frontal operculum. Right frontal tumors can cause
-          neglect-like symptoms...
-        `,
-        Parietal: `
-          Right lateral parietal tumors at the temporoparietal junction (TPJ) often cause hemispatial neglect...
-        `,
-        Temporal: `
-          A large right lateral temporal tumor near the TPJ can also compromise VAN...
-        `,
-        Occipital: `
-          Occipital lesions might mimic neglect if the patient has homonymous hemianopia...
-        `
-      },
-      "Multiple Demand (MD) Network": {
-        Frontal: `
-          The lateral frontal cortex is a core MD node for domain-general cognitive control. Lesions here
-          reduce fluid intelligence, multi-tasking, and mental flexibility...
-        `,
-        Parietal: `
-          Parietal portions of the MD network (intraparietal sulcus, angular gyrus) handle flexible cognition...
-        `,
-        Temporal: `
-          Temporal tumors rarely target MD unless they expand fronto-parietally...
-        `,
-        Occipital: `
-          Occipital lesions seldom affect the MD network unless they are extensive...
-        `
-      },
-      "Memory (Medial Temporal) Network": {
-        Frontal: `
-          Frontal lesions do not directly damage hippocampal structures but can affect memory retrieval
-          strategies...
-        `,
-        Parietal: `
-          Parietal lobe is not a core medial temporal structure...
-        `,
-        Temporal: `
-          Medial temporal gliomas (hippocampus, parahippocampal gyrus) often cause episodic memory deficits...
-        `,
-        Occipital: `
-          Occipital lesions generally do not affect hippocampal memory networks unless they extend into
-          ventral occipitotemporal regions...
-        `
-      },
-      "Auditory Network": {
-        Frontal: `
-          The frontal lobes do not contain primary auditory cortex. Only if a tumor extends into the opercular
-          or insular region might it indirectly affect auditory processing...
-        `,
-        Parietal: `
-          Parietal lesions seldom cause direct auditory deficits...
-        `,
-        Temporal: `
-          The superior temporal gyrus (Heschl’s gyrus) is critical for auditory processing...
-        `,
-        Occipital: `
-          Occipital tumors are distant from auditory pathways...
-        `
-      },
       "Accessory Language Network": {
         Frontal: `
-          Frontal involvement in accessory (semantic) language is minimal unless orbitofrontal or insular
-          extension affects higher-order language or pragmatics...
+          Frontal lobe tumors generally do not involve the accessory (semantic) language network,
+          which is anchored in the anterior temporal regions. A large orbitofrontal or insular lesion
+          might indirectly affect higher-order language or pragmatics, but core semantic deficits
+          (e.g., difficulty naming people or objects) typically arise from anterior temporal involvement.
+          Thus, we mark frontal locations as Unlikely for accessory language disruption.
         `,
         Parietal: `
-          The left angular gyrus is vital for reading comprehension and semantic integration...
+          The left parietal lobe, especially the angular gyrus, participates in a distributed
+          semantic system supporting reading comprehension and integration of conceptual knowledge.
+          A left lateral parietal tumor that encroaches on the angular gyrus could Possibly disrupt
+          accessory (semantic) language functions, manifesting as alexia, agraphia, or Gerstmann’s
+          syndrome. Right parietal or medial parietal lesions rarely affect semantic processing.
         `,
         Temporal: `
-          The anterior temporal pole is crucial for semantic memory and naming...
+          The anterior temporal pole is a key hub for semantic memory and naming (the Accessory Language
+          Network). Left lateral temporal lesions extending to the temporal pole are Likely to cause
+          deficits in naming and semantic retrieval, such as trouble recalling proper names. Right lateral
+          temporal lesions Possibly impact semantic networks for recognizing familiar faces or social
+          concepts. Medial temporal tumors usually spare these semantic areas.
         `,
         Occipital: `
-          Occipital lesions rarely disrupt accessory language unless they extend into the fusiform gyrus...
+          Occipital lesions rarely involve accessory language. While a posterior tumor might secondarily
+          disrupt ventral visual stream connections, true semantic network deficits require anterior
+          temporal or parietal involvement. Consequently, we mark occipital involvement as Unlikely for
+          the accessory (semantic) language network.
         `
       },
+
+      "Auditory Network": {
+        Frontal: `
+          The frontal lobes do not house primary auditory cortex. A large fronto-insular or opercular
+          tumor might indirectly affect auditory processing by disconnecting subcortical pathways, but
+          true auditory agnosia typically arises from temporal lobe involvement. Hence, frontal
+          locations are Unlikely for direct auditory disruption.
+        `,
+        Parietal: `
+          Parietal lobe tumors seldom affect the auditory network unless they extend into the superior
+          temporal gyrus. Classic cortical auditory deficits stem from Heschl’s gyrus or lateral temporal
+          lesions. We label parietal involvement as Unlikely for primary auditory disruption.
+        `,
+        Temporal: `
+          Both left and right lateral temporal tumors often involve the primary auditory cortex (Heschl’s
+          gyrus) or auditory association areas in the superior temporal gyrus, making them Likely to
+          disrupt the Auditory Network. Patients may experience auditory hallucinations, agnosia, or
+          cortical deafness. Medial temporal tumors generally spare these areas unless they extend
+          laterally.
+        `,
+        Occipital: `
+          Occipital lesions are distant from the auditory cortex. They are Unlikely to affect hearing or
+          auditory processing. While a very large posterior tumor might have some indirect effect via
+          subcortical pathways, this is rare, so we mark occipital involvement as Unlikely for auditory
+          disruption.
+        `
+      },
+
+      "Central Executive Network (CEN)": {
+        Frontal: `
+          Tumors in the lateral frontal cortex (especially dorsolateral prefrontal regions) are Likely
+          to disrupt the fronto-parietal CEN, causing executive dysfunction: poor planning, working
+          memory deficits, and impaired decision-making. Medial frontal lesions (anterior cingulate)
+          are Possibly involved, since they can disconnect executive circuits but do not typically
+          damage the core dorsolateral node.
+        `,
+        Parietal: `
+          The lateral parietal cortex (angular gyrus, intraparietal sulcus) is a key node in the CEN.
+          Lesions here are Likely to reduce fluid intelligence and working memory, consistent with
+          fronto-parietal executive disruption. Medial parietal tumors are only Possibly disruptive
+          to the CEN unless they extensively disconnect parietal-frontal pathways.
+        `,
+        Temporal: `
+          Purely temporal tumors generally spare the CEN unless they invade fronto-parietal junctions.
+          A large lateral temporal lesion might Possibly affect executive function via connectivity
+          changes, but the classic node of the CEN is in dorsolateral frontal and parietal areas.
+        `,
+        Occipital: `
+          Occipital gliomas seldom affect the CEN, which is fronto-parietal. Even large posterior tumors
+          rarely disrupt executive function unless they encroach on parietal regions. Hence, occipital
+          involvement is Unlikely for CEN disruption.
+        `
+      },
+
+      "Dorsal Attention Network (DAN)": {
+        Frontal: `
+          The frontal eye fields (FEF) in the dorsolateral frontal cortex are part of the DAN,
+          supporting top-down visual attention and saccade planning. A lateral frontal tumor can
+          Possibly impair DAN by slowing eye movement initiation or attentional focus. True hemispatial
+          neglect usually requires parietal involvement, so we mark frontal as Possible for DAN disruption.
+        `,
+        Parietal: `
+          The superior parietal lobule and intraparietal sulcus form the parietal node of the DAN.
+          Lesions here are Likely to disrupt spatial orientation and visual search, leading to difficulty
+          with sustained goal-directed attention. Medial parietal (precuneus) tumors are Possibly
+          involved, since the precuneus also participates in imagery and top-down attention.
+        `,
+        Temporal: `
+          Temporal lobe tumors do not typically disrupt the DAN, which is mainly a dorsal parietal-frontal
+          network. We mark them as Unlikely unless a large tumor extends into parietal territory.
+        `,
+        Occipital: `
+          Occipital lesions may secondarily affect the DAN by degrading visual input, but the DAN’s core
+          nodes are frontal and parietal. We label occipital involvement as Possibly impacting DAN if
+          visual signals are disrupted, but not a primary site of DAN damage.
+        `
+      },
+
+      "Language (Core)": {
+        Frontal: `
+          The left inferior frontal gyrus (Broca’s area) is crucial for expressive language. A left
+          lateral frontal tumor is Likely to cause speech production deficits (aphasia). Right lateral
+          frontal lesions are Possibly involved (they may affect prosody or discourse subtly). Medial
+          frontal lesions (SMA) can cause speech initiation problems but do not typically disrupt core
+          perisylvian language areas.
+        `,
+        Parietal: `
+          The dominant (usually left) inferior parietal region (supramarginal and angular gyri) is part
+          of the extended language network. A left lateral parietal tumor can Possibly affect naming
+          or reading. Right parietal lesions are Unlikely to disrupt core language. Medial parietal
+          tumors do not involve language areas.
+        `,
+        Temporal: `
+          Left lateral temporal tumors (Wernicke’s area in the superior temporal gyrus) are Likely
+          to disrupt language comprehension, causing receptive aphasia. Right lateral temporal lesions
+          are Unlikely to affect core language function. Medial temporal lesions might Possibly cause
+          verbal memory deficits but typically spare Wernicke’s area itself.
+        `,
+        Occipital: `
+          Occipital tumors rarely impact the core language network unless they extend into the splenium
+          or occipitotemporal region to disconnect visual input from language areas (e.g., alexia without
+          agraphia). Generally, occipital involvement is Unlikely for direct language disruption.
+        `
+      },
+
       "Limbic/Paralimbic Network": {
         Frontal: `
-          Medial frontal tumors (anterior cingulate, orbitofrontal) can produce apathy, disinhibition, or
-          personality changes...
+          Medial frontal tumors (anterior cingulate, orbitofrontal) can produce apathy, personality
+          changes, or disinhibition by disrupting limbic circuits. We mark them as Likely for limbic
+          disruption if in the ACC region. Lateral frontal lesions are only Possibly involved if they
+          extend into the fronto-insular or cingulate territory.
         `,
         Parietal: `
-          Parietal involvement in limbic circuits is usually indirect unless the posterior cingulate is
-          affected...
+          The parietal lobe is not a core limbic area. A medial parietal tumor (posterior cingulate)
+          can Possibly affect limbic function (memory retrieval, emotional processing), but lateral
+          parietal lesions are Unlikely to disrupt limbic/paralimbic circuits.
         `,
         Temporal: `
-          The temporal lobe (amygdala, hippocampus) is integral to emotion, memory, and social cognition...
+          The medial temporal lobe (amygdala, hippocampus) is crucial for emotion and memory, so a tumor
+          here can cause limbic network deficits. We mark medial temporal as Likely for limbic/paralimbic
+          involvement. Lateral temporal lesions Possibly affect limbic function if they expand medially.
         `,
         Occipital: `
-          Occipital lesions are far from core limbic structures...
+          Occipital lesions are far from the limbic system and do not typically cause limbic or
+          paralimbic disruption. We label them as Unlikely for limbic network involvement.
         `
       },
+
       "MD Extended": {
         Frontal: `
-          The “extended” multiple-demand network includes cingulo-opercular regions. Medial frontal tumors
-          (especially ACC) may produce additional deficits...
+          The “extended” multiple-demand system includes cingulo-opercular regions (ACC, insula) that
+          help maintain task sets. A medial frontal (ACC) tumor is Likely to disrupt this extended MD
+          system, whereas lateral frontal lesions are Possibly involved. Large lesions can disconnect
+          cingulo-opercular loops, impacting domain-general cognition.
         `,
         Parietal: `
-          Large or medial parietal tumors might indirectly affect cingulo-opercular connectivity...
+          The extended MD network also includes cingulo-opercular pathways that can be indirectly
+          affected by a large parietal lesion. We mark all parietal locations as Possibly for MD Extended
+          involvement, given that disruptions in parietal connectivity may ripple into cingulo-opercular
+          circuits.
         `,
         Temporal: `
-          Temporal lobe tumors usually do not affect the cingulo-opercular system unless extremely large...
+          Temporal lobe tumors typically do not lie in the cingulo-opercular axis unless they invade
+          the insula. We classify them as Unlikely for direct MD Extended disruption, though a massive
+          temporal lesion might secondarily affect these networks.
         `,
         Occipital: `
-          Occipital lesions are far from the cingulate or insula...
+          Occipital lesions are far from cingulate or insular regions. We label them as Unlikely for
+          extended MD network disruption, aside from rare extensive posterior tumors that breach deep
+          structures.
+        `
+      },
+
+      "Multiple Demand (MD) Network": {
+        Frontal: `
+          The lateral frontal cortex is a core site for domain-general (MD) cognition: set-shifting,
+          problem solving, fluid intelligence. Lesions here are Likely to reduce fluid reasoning and
+          multi-demand flexibility. Medial frontal tumors are Possibly involved if they disconnect
+          frontal-subcortical loops but do not directly lesion MD cortex.
+        `,
+        Parietal: `
+          The parietal component of the MD network lies in the intraparietal sulcus and angular gyrus.
+          Lateral parietal lesions are Likely to impair multi-demand cognition, consistent with
+          lesion-mapping studies showing fluid intelligence loss. Medial parietal tumors are only
+          Possibly disruptive.
+        `,
+        Temporal: `
+          Temporal lobe lesions rarely affect the MD network unless they extend into fronto-parietal
+          junctions. We mark them as Unlikely for direct MD disruption, though a massive temporal
+          lesion might produce indirect connectivity effects.
+        `,
+        Occipital: `
+          Occipital lobe tumors generally spare the MD network. Even large posterior lesions do not
+          typically alter domain-general cognition unless they encroach on parietal territory. We
+          mark occipital as Unlikely for MD network disruption.
+        `
+      },
+
+      "Salience": {
+        Frontal: `
+          The anterior cingulate cortex (ACC) and fronto-insular region anchor the salience network,
+          detecting salient stimuli and switching between default mode and task-positive networks.
+          Medial frontal tumors involving the ACC are Likely to disrupt salience, leading to apathy,
+          poor conflict monitoring, or emotional dysregulation. Lateral frontal lesions Possibly
+          affect salience if they extend into the insula.
+        `,
+        Parietal: `
+          The parietal lobe is not a primary node of the salience network. However, large parietal
+          lesions might cause widespread network reorganization that indirectly perturbs salience
+          processing. We label parietal tumors as Possibly involved for salience, especially if
+          medial parietal structures (posterior cingulate) are affected, though that region is more
+          DMN than salience.
+        `,
+        Temporal: `
+          The salience network can be indirectly influenced by a large temporal tumor invading
+          the insula (fronto-insular region). We mark temporal tumors as Possibly for salience
+          involvement if they extend medially. Strictly lateral or medial temporal lesions typically
+          spare the insula, so direct salience disruption is less common.
+        `,
+        Occipital: `
+          Occipital lesions are far from the ACC and insula. We classify them as Unlikely to affect
+          the salience network, aside from rare cases of massive posterior tumors that secondarily
+          alter fronto-insular connectivity.
+        `
+      },
+
+      "Sensorimotor": {
+        Frontal: `
+          The precentral gyrus (primary motor) is in the frontal lobe. Tumors here or near the motor
+          strip are Likely to cause contralateral weakness or fine motor deficits. A medial frontal
+          lesion can affect leg motor function, while a lateral precentral lesion impacts hand or
+          face. Frontal gliomas commonly disrupt sensorimotor pathways.
+        `,
+        Parietal: `
+          The postcentral gyrus (primary somatosensory cortex) is in the parietal lobe. Lateral parietal
+          tumors encroaching on this region cause contralateral sensory loss or paresthesias. Medial
+          parietal lesions near the paracentral lobule affect leg/foot sensation. We mark parietal
+          locations as Likely for sensorimotor disruption.
+        `,
+        Temporal: `
+          Temporal lobe tumors seldom disrupt sensorimotor pathways unless they expand into the rolandic
+          region. Typically, we mark them as Unlikely for direct motor/sensory deficits.
+        `,
+        Occipital: `
+          Occipital lesions are far from the rolandic cortex. We label them as Unlikely for sensorimotor
+          disruption unless they extend forward into parietal territory near the central sulcus, which
+          is quite rare.
+        `
+      },
+
+      "Ventral Attention (VAN)": {
+        Frontal: `
+          The VAN is predominantly right-lateralized in the frontal operculum (inferior frontal gyrus),
+          supporting bottom-up attentional reorienting. A large right lateral frontal tumor can Possibly
+          disrupt VAN by interfering with the frontal component of stimulus-driven attention (e.g.,
+          failing to redirect focus toward unexpected or salient events on the left side). However,
+          classic hemispatial neglect is more commonly associated with parietal or temporal involvement
+          near the right temporoparietal junction (TPJ). In practice, we label right lateral frontal
+          as Possibly for VAN; left frontal or medial frontal lesions rarely cause true VAN deficits.
+        `,
+        Parietal: `
+          Right lateral parietal (especially the inferior parietal lobule or angular gyrus) is a critical
+          node of the VAN. Gliomas in the right parietal region often produce neglect or inattention to
+          the left side, reflecting disrupted stimulus-driven attention. We classify Right Lateral
+          Parietal tumors as Likely to disrupt VAN for this reason. Left parietal lesions cause milder
+          attention deficits, so they are only Possibly involved in VAN. Medial parietal lesions do not
+          typically affect the VAN unless they extend to the lateral parietal cortex.
+        `,
+        Temporal: `
+          The temporal lobe can impact VAN if a tumor involves the right posterior superior temporal gyrus
+          near the TPJ. In such cases, patients may exhibit neglect-like symptoms or difficulty detecting
+          salient stimuli on the left. Our classification marks Right Lateral Temporal (RLT) as Likely for
+          VAN involvement, acknowledging that a large tumor at the TPJ can disrupt bottom-up attention.
+          Left temporal lesions or medial temporal tumors typically spare the VAN.
+        `,
+        Occipital: `
+          Occipital tumors do not directly involve the VAN’s core nodes (right inferior frontal gyrus or
+          right TPJ). However, a right occipital lesion causing left homonymous hemianopia can sometimes
+          mimic neglect, even though the primary deficit is visual field loss rather than an attentional
+          failure. We classify occipital involvement as Possibly affecting VAN in a secondary manner—some
+          patients struggle to notice or react to stimuli in the blind hemifield. This is not “true” VAN
+          neglect but can present similarly in clinical evaluations.
+        `
+      },
+
+      "Visual": {
+        Frontal: `
+          The frontal lobes do not house primary or associative visual cortices. While the frontal eye
+          fields manage gaze, that is part of attention networks (DAN), not core visual processing.
+          Therefore, frontal lesions are Unlikely to cause direct visual field deficits.
+        `,
+        Parietal: `
+          The parietal lobe is part of the dorsal visual stream (the “where” pathway). A medial parietal
+          tumor (precuneus) is Likely to disrupt visual integration if it impinges on parietal-occipital
+          regions. Lateral parietal tumors Possibly affect visual processing by compressing occipital
+          radiations or disturbing dorsal stream connectivity.
+        `,
+        Temporal: `
+          The ventral visual stream runs along the occipitotemporal pathway. A lateral temporal tumor
+          that extends posteriorly might Possibly affect object or face recognition, but primary visual
+          deficits (field cuts) are typically absent unless the lesion reaches occipital territory.
+          Thus, purely temporal lesions are not core visual network disruptions.
+        `,
+        Occipital: `
+          The occipital lobe houses the primary visual cortex (calcarine) and visual association areas.
+          Tumors here are Likely to produce field deficits (hemianopia/quadrantanopia) or higher-order
+          visual agnosias (e.g., color, object recognition) if association cortices are involved. This
+          region is the principal node of the visual network, so occipital lesions are consistently
+          Likely to disrupt vision.
+        `
+      },
+
+      /***************************************************************
+       * NEW: Default Mode Network (DMN)
+       ***************************************************************/
+      "Default Mode Network (DMN)": {
+        Frontal: `
+          The DMN includes medial prefrontal cortex, involved in self-referential thought, mind-wandering,
+          and introspection. Gliomas in the medial frontal region (anterior cingulate or orbitofrontal)
+          can Likely disrupt DMN activity by impairing self-focused processing and emotional regulation.
+          Lateral frontal lesions are Possibly involved if they indirectly affect midline connectivity.
+        `,
+        Parietal: `
+          A key DMN node is the posterior cingulate cortex/precuneus, located in the medial parietal lobe.
+          Lesions here are Likely to disrupt core DMN functions such as autobiographical memory retrieval
+          and self-referential processing. Lateral parietal involvement (angular gyrus) is also sometimes
+          considered part of the DMN, so we mark lateral parietal as Possibly affecting DMN if the angular
+          gyrus is included.
+        `,
+        Temporal: `
+          The DMN can include medial temporal structures (parahippocampal gyrus) for episodic memory and
+          future-thinking. A medial temporal tumor is Likely to disrupt these DMN components. Lateral
+          temporal lesions are Possibly involved if they extend medially or affect DMN connectivity
+          patterns. Purely lateral lesions often spare the DMN nodes.
+        `,
+        Occipital: `
+          The DMN typically does not include occipital cortex. Occipital lesions are Unlikely to affect
+          introspection or mind-wandering networks unless they are so extensive that they alter
+          parietal-occipital midline connectivity. We therefore mark occipital as Unlikely for DMN
+          disruption in most cases.
         `
       }
     };
 
     /***************************************************************
-     * 3. LOCATION -> LIKELY / POSSIBLY
+     * 3. LOCATION -> LIKELY / POSSIBLY / UNLIKELY
+     *    (Now includes DMN)
      ***************************************************************/
     const locationData = {
+      // FRONTAL
       "Left Lateral Frontal": {
-        likely: ["Central Executive Network (CEN)", "Language Network", "Sensorimotor Network"],
-        possibly: ["Dorsal Attention Network (DAN)", "Salience Network", "MD Extended"]
+        likely: ["Central Executive Network (CEN)", "Language (Core)", "Multiple Demand (MD) Network", "Sensorimotor"],
+        possibly: ["Dorsal Attention (DAN)", "Limbic/Paralimbic", "MD Extended", "Salience", "Ventral Attention (VAN)", "Default Mode Network (DMN)"]
       },
       "Left Medial Frontal": {
-        likely: ["Salience Network", "Sensorimotor Network", "MD Extended"],
-        possibly: ["Central Executive Network (CEN)"]
+        likely: ["Limbic/Paralimbic", "Sensorimotor", "MD Extended", "Salience", "Default Mode Network (DMN)"], // DMN likely (medial frontal)
+        possibly: ["Central Executive Network (CEN)", "Multiple Demand (MD) Network"]
       },
       "Right Lateral Frontal": {
-        likely: ["Central Executive Network (CEN)", "Sensorimotor Network"],
-        possibly: ["Language Network", "Dorsal Attention Network (DAN)", "Salience Network", "MD Extended"]
+        likely: ["Central Executive Network (CEN)", "Multiple Demand (MD) Network", "Sensorimotor"],
+        possibly: ["Language (Core)", "Dorsal Attention (DAN)", "Limbic/Paralimbic", "MD Extended", "Salience", "Ventral Attention (VAN)", "Default Mode Network (DMN)"]
       },
       "Right Medial Frontal": {
-        likely: ["Salience Network", "Sensorimotor Network", "MD Extended"],
-        possibly: ["Central Executive Network (CEN)"]
+        likely: ["Limbic/Paralimbic", "Sensorimotor", "MD Extended", "Salience", "Default Mode Network (DMN)"], // DMN likely (medial frontal)
+        possibly: ["Central Executive Network (CEN)", "Multiple Demand (MD) Network"]
       },
+
       // OCCIPITAL
       "Left Lateral Occipital": {
-        likely: ["Visual Network"],
-        possibly: ["Dorsal Attention Network (DAN)", "Ventral Attention Network (VAN)"]
+        likely: ["Visual"],
+        possibly: ["Dorsal Attention (DAN)", "Ventral Attention (VAN)"],
+        // DMN for occipital = Unlikely
       },
       "Left Medial Occipital": {
-        likely: ["Visual Network"],
-        possibly: ["Dorsal Attention Network (DAN)", "Ventral Attention Network (VAN)"]
+        likely: ["Visual"],
+        possibly: ["Dorsal Attention (DAN)", "Ventral Attention (VAN)"]
+        // DMN for occipital = Unlikely
       },
       "Right Lateral Occipital": {
-        likely: ["Visual Network"],
-        possibly: ["Dorsal Attention Network (DAN)", "Ventral Attention Network (VAN)"]
+        likely: ["Visual"],
+        possibly: ["Dorsal Attention (DAN)", "Ventral Attention (VAN)"]
+        // DMN for occipital = Unlikely
       },
       "Right Medial Occipital": {
-        likely: ["Visual Network"],
-        possibly: ["Dorsal Attention Network (DAN)", "Ventral Attention Network (VAN)"]
+        likely: ["Visual"],
+        possibly: ["Dorsal Attention (DAN)", "Ventral Attention (VAN)"]
+        // DMN for occipital = Unlikely
       },
+
       // PARIETAL
       "Left Lateral Parietal": {
-        likely: ["Dorsal Attention Network (DAN)", "Central Executive Network (CEN)", "Multiple Demand (MD) Network", "Sensorimotor Network"],
-        possibly: ["Ventral Attention Network (VAN)", "Language Network", "Visual Network", "Salience Network", "Accessory Language Network", "MD Extended"]
+        likely: ["Dorsal Attention (DAN)", "Central Executive Network (CEN)", "Multiple Demand (MD) Network", "Sensorimotor"],
+        possibly: ["Ventral Attention (VAN)", "Language (Core)", "Visual", "Salience", "Accessory Language Network", "MD Extended", "Default Mode Network (DMN)"]
       },
       "Left Medial Parietal": {
-        likely: ["Sensorimotor Network", "Visual Network"],
-        possibly: ["Dorsal Attention Network (DAN)", "Central Executive Network (CEN)", "Multiple Demand (MD) Network", "Salience Network", "Limbic/Paralimbic Network", "MD Extended"]
+        likely: ["Sensorimotor", "Visual", "Default Mode Network (DMN)"], // posterior cingulate => DMN
+        possibly: ["Dorsal Attention (DAN)", "Central Executive Network (CEN)", "Multiple Demand (MD) Network", "Salience", "Limbic/Paralimbic", "MD Extended"]
       },
       "Right Lateral Parietal": {
-        likely: ["Dorsal Attention Network (DAN)", "Ventral Attention Network (VAN)", "Central Executive Network (CEN)", "Multiple Demand (MD) Network", "Sensorimotor Network"],
-        possibly: ["Visual Network", "Salience Network", "MD Extended"]
+        likely: ["Dorsal Attention (DAN)", "Ventral Attention (VAN)", "Central Executive Network (CEN)", "Multiple Demand (MD) Network", "Sensorimotor"],
+        possibly: ["Visual", "Salience", "MD Extended", "Default Mode Network (DMN)"]
       },
       "Right Medial Parietal": {
-        likely: ["Sensorimotor Network", "Visual Network"],
-        possibly: ["Dorsal Attention Network (DAN)", "Central Executive Network (CEN)", "Multiple Demand (MD) Network", "Salience Network", "Limbic/Paralimbic Network", "MD Extended"]
+        likely: ["Sensorimotor", "Visual", "Default Mode Network (DMN)"],
+        possibly: ["Dorsal Attention (DAN)", "Central Executive Network (CEN)", "Multiple Demand (MD) Network", "Salience", "Limbic/Paralimbic", "MD Extended"]
       },
+
       // TEMPORAL
       "Left Lateral Temporal": {
-        likely: ["Language Network", "Accessory Language Network (Semantic Memory)", "Auditory Network"],
-        possibly: ["Salience Network", "Visual Network"]
+        likely: ["Language (Core)", "Accessory Language Network", "Auditory"],
+        possibly: ["Salience", "Visual", "Central Executive (FPN)", "Default Mode Network (DMN)"] // DMN possibly if extends medially
       },
       "Left Medial Temporal": {
-        likely: ["Memory (Medial Temporal) Network"],
-        possibly: ["Language Network", "Accessory Language Network (Semantic Memory)", "Salience Network"]
+        likely: ["Medial Temporal (Memory)", "Limbic/Paralimbic", "Default Mode Network (DMN)"], // DMN likely (medial temporal structures)
+        possibly: ["Language (Core)", "Accessory Language Network", "Salience"]
       },
       "Right Lateral Temporal": {
-        likely: ["Auditory Network", "Ventral Attention Network (VAN)"],
-        possibly: ["Accessory Language Network (Semantic Memory)", "Salience Network", "Visual Network"]
+        likely: ["Auditory", "Ventral Attention (VAN)"],
+        possibly: ["Accessory Language Network", "Salience", "Visual", "Central Executive (FPN)", "Default Mode Network (DMN)"]
       },
       "Right Medial Temporal": {
-        likely: ["Memory (Medial Temporal) Network"],
-        possibly: ["Accessory Language Network (Semantic Memory)", "Salience Network"]
+        likely: ["Medial Temporal (Memory)", "Limbic/Paralimbic", "Default Mode Network (DMN)"],
+        possibly: ["Accessory Language Network", "Salience"]
       }
     };
 
     /***************************************************************
-     * 4. TEST CATALOG
+     * 4. TEST CATALOG (now includes DMN tests)
      ***************************************************************/
     const testCatalog = {
       "Central Executive Network (CEN)": [
@@ -572,30 +714,30 @@
         { name: "Stroop Color-Word Interference", duration: 5, desc: "Inhibitory control and attention." },
         { name: "Wisconsin Card Sorting Test (WCST)", duration: 15, desc: "Cognitive flexibility, problem-solving." }
       ],
-      "Language Network": [
+      "Language (Core)": [
         { name: "Boston Naming Test (BNT)", duration: 10, desc: "Visual confrontation naming (10–15 min)." },
         { name: "Token Test", duration: 10, desc: "Auditory language comprehension." },
         { name: "Verbal Fluency (COWAT)", duration: 5, desc: "Word generation (phonemic/semantic)." }
       ],
-      "Sensorimotor Network": [
+      "Sensorimotor": [
         { name: "Grooved Pegboard", duration: 5, desc: "Fine motor coordination/dexterity." },
         { name: "Finger Tapping Test", duration: 2, desc: "Motor speed measurement." }
       ],
-      "Visual Network": [
+      "Visual": [
         { name: "Confrontation Visual Field", duration: 3, desc: "Screens for visual field deficits." },
         { name: "VOSP Battery", duration: 15, desc: "Visual object/space perception." },
         { name: "Benton Facial Recognition Test", duration: 10, desc: "Face recognition, prosopagnosia." }
       ],
-      "Salience Network": [
+      "Salience": [
         { name: "Stroop Test (again)", duration: 5, desc: "ACC conflict monitoring for salience." },
         { name: "Task-Switching Paradigm", duration: 5, desc: "Frequent rule changes stress salience." }
       ],
-      "Dorsal Attention Network (DAN)": [
+      "Dorsal Attention (DAN)": [
         { name: "Trail Making Test A", duration: 3, desc: "Visual scanning, speed." },
         { name: "Continuous Performance Test (CPT)", duration: 14, desc: "Sustained attention (14 min)." },
         { name: "Symbol Digit Modalities Test (SDMT)", duration: 5, desc: "Attention/processing speed." }
       ],
-      "Ventral Attention Network (VAN)": [
+      "Ventral Attention (VAN)": [
         { name: "Line Bisection Test", duration: 2, desc: "Screens for unilateral neglect." },
         { name: "Star Cancellation Test", duration: 5, desc: "Cross out targets to detect neglect." }
       ],
@@ -604,12 +746,12 @@
         { name: "Trail Making Test B (MD)", duration: 5, desc: "Set-shifting for multi-demand tasks." },
         { name: "Stroop (MD)", duration: 5, desc: "Inhibition/attention for MD." }
       ],
-      "Memory (Medial Temporal) Network": [
+      "Medial Temporal (Memory)": [
         { name: "California Verbal Learning Test (CVLT)", duration: 20, desc: "Verbal list learning, ~20 min." },
         { name: "Rey-O Complex Figure (Delayed)", duration: 10, desc: "Nonverbal (visual) memory." },
         { name: "Logical Memory (WMS)", duration: 15, desc: "Narrative memory." }
       ],
-      "Auditory Network": [
+      "Auditory": [
         { name: "Phonemic Discrimination", duration: 5, desc: "Distinguish syllables (da/ba)." },
         { name: "Dichotic Listening Test", duration: 10, desc: "Simultaneous syllables in each ear." }
       ],
@@ -617,13 +759,34 @@
         { name: "Pyramids and Palm Trees", duration: 5, desc: "Semantic association test." },
         { name: "Famous Faces Recognition", duration: 5, desc: "Assess proper name retrieval/face naming." }
       ],
-      "Limbic/Paralimbic Network": [
+      "Limbic/Paralimbic": [
         { name: "Iowa Gambling Task (IGT)", duration: 10, desc: "Decision-making under risk." },
         { name: "Emotion Recognition (Faces)", duration: 5, desc: "Identify facial expressions." }
       ],
       "MD Extended": [
         { name: "WCST (Cingulo-Opercular)", duration: 15, desc: "Extended MD focus on set maintenance." },
         { name: "Stroop (Cingulo-Opercular)", duration: 5, desc: "ACC conflict for extended MD." }
+      ],
+
+      /***************************************************************
+       * NEW DMN TESTS
+       ***************************************************************/
+      "Default Mode Network (DMN)": [
+        {
+          name: "Autobiographical Memory Interview (AMI)",
+          duration: 30,
+          desc: "Structured interview assessing recall of personal life events (childhood, early adult, recent)."
+        },
+        {
+          name: "Self-Referential Encoding Task (SRET)",
+          duration: 10,
+          desc: "Patients rate trait adjectives as 'self-descriptive' or not, testing self-focused processing and memory."
+        },
+        {
+          name: "Mind-Wandering Questionnaire (MWQ)",
+          duration: 5,
+          desc: "Brief self-report measure of mind-wandering frequency and internally directed attention."
+        }
       ]
     };
 
@@ -844,14 +1007,14 @@
       }
 
       // Finally, append results
-      document.getElementById("infoPanel").appendChild(resultsDiv);
+      infoPanel.appendChild(resultsDiv);
     });
 
     /***************************************************************
      * 7. GENERATE BATTERY FUNCTION
      *    - short => pick shortest test
+     *    - medium => pick middle test
      *    - long => pick longest
-     *    - medium => pick the "middle" test in ascending order
      ***************************************************************/
     function generateBattery(networkNames, choice) {
       const result = [];

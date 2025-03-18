@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GliomaCog</title>
+  <style>
+    /* Base Styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f8fc;
+      margin: 0;
+      padding: 0;
+    }
+    /* Header */
+    .header {
+      background-color: #0077b6;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      font-size: 2em; /* Larger header */
+    }
+    /* Container */
+    .container {
+      max-width: 1200px;
+      background: #fff;
+      margin: 40px auto;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    /* Toggle Buttons */
+    .toggle-buttons {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+    }
+    .toggle-buttons button {
+      background-color: #e0f7fa;
+      color: #333;
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9em;
+      margin-left: 10px;
+      transition: background-color 0.2s ease;
+    }
+    .toggle-buttons button:hover {
+      background-color: #c9edf2;
+    }
+    /* Checkbox Columns: Left vs Right */
+    .checkbox-columns {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .checkbox-column {
+      flex: 1;
+    }
+    /* Lobe color classes */
+    .frontal {
+      background-color: #cdebe6; /* Soft greenish */
+    }
+    .occipital {
+      background-color: #faedcd; /* Soft tan */
+    }
+    .parietal {
+      background-color: #d7e3fc; /* Soft blue */
+    }
+    .temporal {
+      background-color: #e9d6f7; /* Soft purple */
+    }
+    /* Checkboxes */
+    label {
+      display: block;
+      padding: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 5px;
+    }
+    input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    /* Submit Button - bigger */
+    button[type="submit"] {
+      background-color: #0077b6;
+      color: #fff;
+      padding: 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1.1em;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
+    button[type="submit"]:hover {
+      background-color: #005f87;
+    }
+    /* Results */
+    #infoPanel {
+      margin-top: 20px;
+    }
+    .info-results {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      background-color: #f9f9f9;
+    }
+    .info-results h3 {
+      margin-top: 0;
+      color: #0077b6;
+    }
+    .network-block {
+      margin-bottom: 15px;
+    }
+    .network-block h4 {
+      margin: 0 0 5px;
+      color: #005f87;
+    }
+    .possibly-list {
+      margin: 15px 0 0 20px;
+      padding: 0;
+      list-style: disc;
+    }
+    /* Additional Tests Section (Subtle gray background) */
+    .test-section {
+      background-color: #eeeeee;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .test-section h4 {
+      margin-top: 0;
+      color: #333;
+      font-size: 1.2em;
+    }
+    .test-section ul {
+      list-style: disc;
+      margin-left: 20px;
+    }
+    /* Battery length selection (Short/Medium/Long) side-by-side buttons */
+    .battery-choice {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+    .battery-btn {
+      background-color: #fff;
+      border: 2px solid #0077b6;
+      color: #0077b6;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .battery-btn:hover {
+      background-color: #0077b6;
+      color: #fff;
+    }
+    .battery-btn.selected {
+      background-color: #0077b6;
+      color: #fff;
+    }
+    /* "Design my neurocog battery" bigger and more prominent */
+    .design-battery-btn {
+      margin-left: auto;
+      margin-top: 15px;
+      background-color: #ffae00;
+      color: #fff;
+      font-size: 1.1em;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    .design-battery-btn:hover {
+      background-color: #e69600;
+    }
+    .battery-output {
+      margin-top: 15px;
+      border-top: 1px solid #ccc;
+      padding-top: 10px;
+    }
+    /* Red total time */
+    .total-time {
+      color: red;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .test-details p {
+      margin: 5px 0 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>GliomaCog</h1>
+  </div>
+  <div class="container">
+    <h2>Select Tumor Locations</h2>
+
+    <!-- "Select All" / "Deselect All" buttons -->
+    <div class="toggle-buttons">
+      <button type="button" id="selectAllBtn">Select All</button>
+      <button type="button" id="deselectAllBtn">Deselect All</button>
+    </div>
+
+    <form id="combinationForm">
+      <div class="checkbox-columns">
+        <!-- Left side checkboxes -->
+        <div class="checkbox-column" id="leftColumn"></div>
+        <!-- Right side checkboxes -->
+        <div class="checkbox-column" id="rightColumn"></div>
+      </div>
+      <button type="submit" id="submitBtn">Submit</button>
+    </form>
+
+    <div id="infoPanel"></div>
+  </div>
+
+  <script>
+    /***************************************************************
+     * 1. LOBE & SIDES SETUP
+     ***************************************************************/
+    const lobesOrdered = ["Frontal", "Occipital", "Parietal", "Temporal"];
+    const sidesOrdered = ["Left", "Right"];
+    const orientationOrdered = ["Lateral", "Medial"];
+
+    const lobeColorClass = {
+      "Frontal": "frontal",
+      "Occipital": "occipital",
+      "Parietal": "parietal",
+      "Temporal": "temporal"
+    };
+
+    const leftColumn = document.getElementById("leftColumn");
+    const rightColumn = document.getElementById("rightColumn");
+
+    lobesOrdered.forEach(lobe => {
+      sidesOrdered.forEach(side => {
+        orientationOrdered.forEach(orientation => {
+          const labelText = `${side} ${orientation} ${lobe}`;
+          const checkboxId = labelText.replace(/\s+/g, "-").toLowerCase();
+          const colorClass = lobeColorClass[lobe] || "";
+
+          const label = document.createElement("label");
+          label.classList.add(colorClass);
+          label.setAttribute("for", checkboxId);
+          label.innerHTML = `
+            <input type="checkbox" id="${checkboxId}" value="${labelText}">
+            ${labelText}
+          `;
+          if (side === "Left") {
+            leftColumn.appendChild(label);
+          } else {
+            rightColumn.appendChild(label);
+          }
+        });
+      });
+    });
+
+    /***************************************************************
+     * 2. MASTER EXPLANATIONS (FULL LENGTH)
+     ***************************************************************/
+    const masterExplanations = {
+      "Central Executive Network (CEN)": {
+        Frontal: `
+          Gliomas in the frontal cortex frequently disrupt the fronto-parietal CEN, leading to executive
+          dysfunction (planning, decision-making, working memory). Tumors in the lateral frontal cortex
+          (especially dorsolateral prefrontal regions) often impair planning and working memory. For example,
+          patients with left frontal gliomas show deficits in verbal working memory, while right frontal
+          lesions might affect non-verbal executive tasks. Medial frontal tumors (e.g., anterior cingulate)
+          are less directly involved in the CEN, but large medial lesions can indirectly affect executive
+          circuits by disconnecting frontal-subcortical loops.
+        `,
+        Parietal: `
+          The parietal cortex (angular gyrus, intraparietal sulcus) is also a key node in the fronto-parietal
+          CEN. Damage here reduces fluid intelligence and multi-demand cognitive processes. Neuropsychological
+          lesion-mapping studies confirm that parietal lobe lesions often correlate with working memory
+          deficits and problem-solving impairments (Woolgar et al., 2010).
+        `,
+        Temporal: `
+          Purely temporal lobe lesions typically spare the core CEN unless they extend into fronto-parietal
+          junctions. Large temporal tumors might cause indirect executive difficulties by affecting connectivity
+          with frontal or parietal regions, leading to mental flexibility or decision-making deficits.
+        `,
+        Occipital: `
+          Occipital involvement usually spares the CEN, though extensive lesions that encroach on parietal
+          territory can partially affect executive function. Diffuse connectivity changes might degrade
+          fronto-parietal network efficiency even when the primary lesion is posterior.
+        `
+      },
+      "Language Network": {
+        Frontal: `
+          Left lateral frontal tumors (particularly involving Broca’s area in the inferior frontal gyrus)
+          commonly cause expressive aphasia or word-finding difficulties...
+        `,
+        Parietal: `
+          The dominant (usually left) parietal lobe, especially the angular and supramarginal gyri, supports
+          reading, writing, and naming...
+        `,
+        Temporal: `
+          In the dominant temporal lobe (superior temporal gyrus, Wernicke’s area), tumors frequently
+          cause receptive aphasia or impaired language comprehension...
+        `,
+        Occipital: `
+          Occipital tumors rarely affect the core language network unless they extend into the splenium
+          of the corpus callosum or occipitotemporal regions...
+        `
+      },
+      "Sensorimotor Network": {
+        Frontal: `
+          Tumors near the precentral gyrus (primary motor cortex) produce contralateral weakness or slowed
+          fine motor skills. A parasagittal (medial frontal) lesion might cause leg motor deficits...
+        `,
+        Parietal: `
+          The postcentral gyrus is the primary somatosensory cortex. Parietal tumors encroaching on this area
+          cause contralateral numbness, sensory loss, or sensory seizures...
+        `,
+        Temporal: `
+          Temporal lobe tumors seldom disrupt sensorimotor pathways unless they expand into the rolandic region...
+        `,
+        Occipital: `
+          Occipital gliomas generally spare the sensorimotor strip unless they extend forward into parietal
+          territory near the central sulcus...
+        `
+      },
+      "Visual Network": {
+        Frontal: `
+          Frontal lesions may affect the frontal eye fields (voluntary gaze control) but seldom produce
+          homonymous field cuts unless parietal or occipital pathways are involved...
+        `,
+        Parietal: `
+          The parietal lobe is part of the dorsal visual stream (“where” pathway), crucial for spatial vision...
+        `,
+        Temporal: `
+          The ventral visual stream (occipitotemporal) can be compromised if temporal lesions invade the fusiform
+          or inferior temporal gyrus...
+        `,
+        Occipital: `
+          Occipital gliomas typically cause homonymous hemianopia or quadrantanopia if the primary visual cortex
+          is involved...
+        `
+      },
+      "Salience Network": {
+        Frontal: `
+          Medial frontal tumors involving the anterior cingulate cortex (ACC) frequently disrupt the salience
+          network, leading to apathy, impaired motivation, or personality changes...
+        `,
+        Parietal: `
+          Parietal lobe involvement in the salience network is indirect. Large medial parietal tumors might
+          affect default mode–salience interactions...
+        `,
+        Temporal: `
+          Temporal lobe tumors usually spare core salience nodes unless they invade the insula...
+        `,
+        Occipital: `
+          Occipital lesions are far from the ACC or insula...
+        `
+      },
+      "Dorsal Attention Network (DAN)": {
+        Frontal: `
+          The frontal eye fields (FEF) are a key DAN node. A lateral frontal tumor affecting the FEF may slow
+          top-down attention and voluntary saccades...
+        `,
+        Parietal: `
+          Parietal lesions (superior parietal lobule, intraparietal sulcus) frequently impair spatial orientation,
+          visual search, and sustained attention...
+        `,
+        Temporal: `
+          Pure temporal tumors rarely disrupt DAN unless they extend into the parietal junction...
+        `,
+        Occipital: `
+          Occipital involvement can degrade visual input, indirectly affecting the DAN’s ability to orient...
+        `
+      },
+      "Ventral Attention Network (VAN)": {
+        Frontal: `
+          The VAN is predominantly right-lateralized in the frontal operculum. Right frontal tumors can cause
+          neglect-like symptoms...
+        `,
+        Parietal: `
+          Right lateral parietal tumors at the temporoparietal junction (TPJ) often cause hemispatial neglect...
+        `,
+        Temporal: `
+          A large right lateral temporal tumor near the TPJ can also compromise VAN...
+        `,
+        Occipital: `
+          Occipital lesions might mimic neglect if the patient has homonymous hemianopia...
+        `
+      },
+      "Multiple Demand (MD) Network": {
+        Frontal: `
+          The lateral frontal cortex is a core MD node for domain-general cognitive control. Lesions here
+          reduce fluid intelligence, multi-tasking, and mental flexibility...
+        `,
+        Parietal: `
+          Parietal portions of the MD network (intraparietal sulcus, angular gyrus) handle flexible cognition...
+        `,
+        Temporal: `
+          Temporal tumors rarely target MD unless they expand fronto-parietally...
+        `,
+        Occipital: `
+          Occipital lesions seldom affect the MD network unless they are extensive...
+        `
+      },
+      "Memory (Medial Temporal) Network": {
+        Frontal: `
+          Frontal lesions do not directly damage hippocampal structures but can affect memory retrieval
+          strategies...
+        `,
+        Parietal: `
+          Parietal lobe is not a core medial temporal structure...
+        `,
+        Temporal: `
+          Medial temporal gliomas (hippocampus, parahippocampal gyrus) often cause episodic memory deficits...
+        `,
+        Occipital: `
+          Occipital lesions generally do not affect hippocampal memory networks unless they extend into
+          ventral occipitotemporal regions...
+        `
+      },
+      "Auditory Network": {
+        Frontal: `
+          The frontal lobes do not contain primary auditory cortex. Only if a tumor extends into the opercular
+          or insular region might it indirectly affect auditory processing...
+        `,
+        Parietal: `
+          Parietal lesions seldom cause direct auditory deficits...
+        `,
+        Temporal: `
+          The superior temporal gyrus (Heschl’s gyrus) is critical for auditory processing...
+        `,
+        Occipital: `
+          Occipital tumors are distant from auditory pathways...
+        `
+      },
+      "Accessory Language Network": {
+        Frontal: `
+          Frontal involvement in accessory (semantic) language is minimal unless orbitofrontal or insular
+          extension affects higher-order language or pragmatics...
+        `,
+        Parietal: `
+          The left angular gyrus is vital for reading comprehension and semantic integration...
+        `,
+        Temporal: `
+          The anterior temporal pole is crucial for semantic memory and naming...
+        `,
+        Occipital: `
+          Occipital lesions rarely disrupt accessory language unless they extend into the fusiform gyrus...
+        `
+      },
+      "Limbic/Paralimbic Network": {
+        Frontal: `
+          Medial frontal tumors (anterior cingulate, orbitofrontal) can produce apathy, disinhibition, or
+          personality changes...
+        `,
+        Parietal: `
+          Parietal involvement in limbic circuits is usually indirect unless the posterior cingulate is
+          affected...
+        `,
+        Temporal: `
+          The temporal lobe (amygdala, hippocampus) is integral to emotion, memory, and social cognition...
+        `,
+        Occipital: `
+          Occipital lesions are far from core limbic structures...
+        `
+      },
+      "MD Extended": {
+        Frontal: `
+          The “extended” multiple-demand network includes cingulo-opercular regions. Medial frontal tumors
+          (especially ACC) may produce additional deficits...
+        `,
+        Parietal: `
+          Large or medial parietal tumors might indirectly affect cingulo-opercular connectivity...
+        `,
+        Temporal: `
+          Temporal lobe tumors usually do not affect the cingulo-opercular system unless extremely large...
+        `,
+        Occipital: `
+          Occipital lesions are far from the cingulate or insula...
+        `
+      }
+    };
+
+    /***************************************************************
+     * 3. LOCATION -> LIKELY / POSSIBLY
+     ***************************************************************/
+    const locationData = {
+      "Left Lateral Frontal": {
+        likely: ["Central Executive Network (CEN)", "Language Network", "Sensorimotor Network"],
+        possibly: ["Dorsal Attention Network (DAN)", "Salience Network", "MD Extended"]
+      },
+      "Left Medial Frontal": {
+        likely: ["Salience Network", "Sensorimotor Network", "MD Extended"],
+        possibly: ["Central Executive Network (CEN)"]
+      },
+      "Right Lateral Frontal": {
+        likely: ["Central Executive Network (CEN)", "Sensorimotor Network"],
+        possibly: ["Language Network", "Dorsal Attention Network (DAN)", "Salience Network", "MD Extended"]
+      },
+      "Right Medial Frontal": {
+        likely: ["Salience Network", "Sensorimotor Network", "MD Extended"],
+        possibly: ["Central Executive Network (CEN)"]
+      },
+      // OCCIPITAL
+      "Left Lateral Occipital": {
+        likely: ["Visual Network"],
+        possibly: ["Dorsal Attention Network (DAN)", "Ventral Attention Network (VAN)"]
+      },
+      "Left Medial Occipital": {
+        likely: ["Visual Network"],
+        possibly: ["Dorsal Attention Network (DAN)", "Ventral Attention Network (VAN)"]
+      },
+      "Right Lateral Occipital": {
+        likely: ["Visual Network"],
+        possibly: ["Dorsal Attention Network (DAN)", "Ventral Attention Network (VAN)"]
+      },
+      "Right Medial Occipital": {
+        likely: ["Visual Network"],
+        possibly: ["Dorsal Attention Network (DAN)", "Ventral Attention Network (VAN)"]
+      },
+      // PARIETAL
+      "Left Lateral Parietal": {
+        likely: ["Dorsal Attention Network (DAN)", "Central Executive Network (CEN)", "Multiple Demand (MD) Network", "Sensorimotor Network"],
+        possibly: ["Ventral Attention Network (VAN)", "Language Network", "Visual Network", "Salience Network", "Accessory Language Network", "MD Extended"]
+      },
+      "Left Medial Parietal": {
+        likely: ["Sensorimotor Network", "Visual Network"],
+        possibly: ["Dorsal Attention Network (DAN)", "Central Executive Network (CEN)", "Multiple Demand (MD) Network", "Salience Network", "Limbic/Paralimbic Network", "MD Extended"]
+      },
+      "Right Lateral Parietal": {
+        likely: ["Dorsal Attention Network (DAN)", "Ventral Attention Network (VAN)", "Central Executive Network (CEN)", "Multiple Demand (MD) Network", "Sensorimotor Network"],
+        possibly: ["Visual Network", "Salience Network", "MD Extended"]
+      },
+      "Right Medial Parietal": {
+        likely: ["Sensorimotor Network", "Visual Network"],
+        possibly: ["Dorsal Attention Network (DAN)", "Central Executive Network (CEN)", "Multiple Demand (MD) Network", "Salience Network", "Limbic/Paralimbic Network", "MD Extended"]
+      },
+      // TEMPORAL
+      "Left Lateral Temporal": {
+        likely: ["Language Network", "Accessory Language Network (Semantic Memory)", "Auditory Network"],
+        possibly: ["Salience Network", "Visual Network"]
+      },
+      "Left Medial Temporal": {
+        likely: ["Memory (Medial Temporal) Network"],
+        possibly: ["Language Network", "Accessory Language Network (Semantic Memory)", "Salience Network"]
+      },
+      "Right Lateral Temporal": {
+        likely: ["Auditory Network", "Ventral Attention Network (VAN)"],
+        possibly: ["Accessory Language Network (Semantic Memory)", "Salience Network", "Visual Network"]
+      },
+      "Right Medial Temporal": {
+        likely: ["Memory (Medial Temporal) Network"],
+        possibly: ["Accessory Language Network (Semantic Memory)", "Salience Network"]
+      }
+    };
+
+    /***************************************************************
+     * 4. TEST CATALOG
+     ***************************************************************/
+    const testCatalog = {
+      "Central Executive Network (CEN)": [
+        { name: "Trail Making Test B", duration: 5, desc: "Set-shifting, mental flexibility." },
+        { name: "Stroop Color-Word Interference", duration: 5, desc: "Inhibitory control and attention." },
+        { name: "Wisconsin Card Sorting Test (WCST)", duration: 15, desc: "Cognitive flexibility, problem-solving." }
+      ],
+      "Language Network": [
+        { name: "Boston Naming Test (BNT)", duration: 10, desc: "Visual confrontation naming (10–15 min)." },
+        { name: "Token Test", duration: 10, desc: "Auditory language comprehension." },
+        { name: "Verbal Fluency (COWAT)", duration: 5, desc: "Word generation (phonemic/semantic)." }
+      ],
+      "Sensorimotor Network": [
+        { name: "Grooved Pegboard", duration: 5, desc: "Fine motor coordination/dexterity." },
+        { name: "Finger Tapping Test", duration: 2, desc: "Motor speed measurement." }
+      ],
+      "Visual Network": [
+        { name: "Confrontation Visual Field", duration: 3, desc: "Screens for visual field deficits." },
+        { name: "VOSP Battery", duration: 15, desc: "Visual object/space perception." },
+        { name: "Benton Facial Recognition Test", duration: 10, desc: "Face recognition, prosopagnosia." }
+      ],
+      "Salience Network": [
+        { name: "Stroop Test (again)", duration: 5, desc: "ACC conflict monitoring for salience." },
+        { name: "Task-Switching Paradigm", duration: 5, desc: "Frequent rule changes stress salience." }
+      ],
+      "Dorsal Attention Network (DAN)": [
+        { name: "Trail Making Test A", duration: 3, desc: "Visual scanning, speed." },
+        { name: "Continuous Performance Test (CPT)", duration: 14, desc: "Sustained attention (14 min)." },
+        { name: "Symbol Digit Modalities Test (SDMT)", duration: 5, desc: "Attention/processing speed." }
+      ],
+      "Ventral Attention Network (VAN)": [
+        { name: "Line Bisection Test", duration: 2, desc: "Screens for unilateral neglect." },
+        { name: "Star Cancellation Test", duration: 5, desc: "Cross out targets to detect neglect." }
+      ],
+      "Multiple Demand (MD) Network": [
+        { name: "WCST", duration: 15, desc: "Card Sorting (flexibility, problem-solving)." },
+        { name: "Trail Making Test B (MD)", duration: 5, desc: "Set-shifting for multi-demand tasks." },
+        { name: "Stroop (MD)", duration: 5, desc: "Inhibition/attention for MD." }
+      ],
+      "Memory (Medial Temporal) Network": [
+        { name: "California Verbal Learning Test (CVLT)", duration: 20, desc: "Verbal list learning, ~20 min." },
+        { name: "Rey-O Complex Figure (Delayed)", duration: 10, desc: "Nonverbal (visual) memory." },
+        { name: "Logical Memory (WMS)", duration: 15, desc: "Narrative memory." }
+      ],
+      "Auditory Network": [
+        { name: "Phonemic Discrimination", duration: 5, desc: "Distinguish syllables (da/ba)." },
+        { name: "Dichotic Listening Test", duration: 10, desc: "Simultaneous syllables in each ear." }
+      ],
+      "Accessory Language Network": [
+        { name: "Pyramids and Palm Trees", duration: 5, desc: "Semantic association test." },
+        { name: "Famous Faces Recognition", duration: 5, desc: "Assess proper name retrieval/face naming." }
+      ],
+      "Limbic/Paralimbic Network": [
+        { name: "Iowa Gambling Task (IGT)", duration: 10, desc: "Decision-making under risk." },
+        { name: "Emotion Recognition (Faces)", duration: 5, desc: "Identify facial expressions." }
+      ],
+      "MD Extended": [
+        { name: "WCST (Cingulo-Opercular)", duration: 15, desc: "Extended MD focus on set maintenance." },
+        { name: "Stroop (Cingulo-Opercular)", duration: 5, desc: "ACC conflict for extended MD." }
+      ]
+    };
+
+    /***************************************************************
+     * 5. SELECT ALL / DESELECT ALL
+     ***************************************************************/
+    const selectAllBtn = document.getElementById("selectAllBtn");
+    const deselectAllBtn = document.getElementById("deselectAllBtn");
+
+    selectAllBtn.addEventListener("click", () => {
+      document.querySelectorAll("input[type='checkbox']").forEach(cb => (cb.checked = true));
+    });
+    deselectAllBtn.addEventListener("click", () => {
+      document.querySelectorAll("input[type='checkbox']").forEach(cb => (cb.checked = false));
+    });
+
+    /***************************************************************
+     * 6. SUBMISSION HANDLER
+     ***************************************************************/
+    document.getElementById("combinationForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const infoPanel = document.getElementById("infoPanel");
+      infoPanel.innerHTML = ""; // Clear previous
+
+      const checkedBoxes = Array.from(document.querySelectorAll("input[type='checkbox']:checked"));
+      if (!checkedBoxes.length) {
+        infoPanel.innerHTML = `<p>No combinations selected. Please select at least one tumor location.</p>`;
+        return;
+      }
+
+      // 1) Collect "Likely" and "Possibly" networks
+      const networkSummary = {}; 
+      checkedBoxes.forEach(cb => {
+        const locName = cb.value;
+        const data = locationData[locName];
+        if (!data) return;
+
+        // Mark "likely"
+        data.likely.forEach(net => {
+          if (!networkSummary[net]) {
+            networkSummary[net] = { status: "likely", lobes: new Set() };
+          } else if (networkSummary[net].status === "possibly") {
+            networkSummary[net].status = "likely";
+          }
+          const lobe = locName.split(" ").slice(-1)[0];
+          networkSummary[net].lobes.add(lobe);
+        });
+
+        // Mark "possibly"
+        data.possibly.forEach(net => {
+          if (!networkSummary[net]) {
+            networkSummary[net] = { status: "possibly", lobes: new Set() };
+          }
+          if (networkSummary[net].status !== "likely") {
+            networkSummary[net].status = "possibly";
+          }
+          const lobe = locName.split(" ").slice(-1)[0];
+          networkSummary[net].lobes.add(lobe);
+        });
+      });
+
+      // Separate "likely" vs "possibly"
+      const likelyNetworks = [];
+      const possiblyNetworks = [];
+      const allNetworks = Object.keys(networkSummary).sort();
+      allNetworks.forEach(netName => {
+        const { status, lobes } = networkSummary[netName];
+        if (status === "likely") {
+          likelyNetworks.push({ netName, lobes });
+        } else {
+          possiblyNetworks.push(netName);
+        }
+      });
+
+      // 2) Build the results card
+      const resultsDiv = document.createElement("div");
+      resultsDiv.className = "info-results";
+      resultsDiv.innerHTML = `<h3>Neural Networks Affected</h3>`;
+
+      // (a) Likely networks + expansions
+      likelyNetworks.forEach(item => {
+        const netName = item.netName;
+        const lobesInvolved = Array.from(item.lobes);
+
+        // Merge text from masterExplanations
+        let combinedText = "";
+        lobesInvolved.forEach(lobe => {
+          const expansionsForNet = masterExplanations[netName] || {};
+          if (expansionsForNet[lobe]) {
+            combinedText += expansionsForNet[lobe].trim() + " ";
+          }
+        });
+        if (!combinedText.trim()) {
+          combinedText = `This network is likely affected, but no additional details are available.`;
+        }
+
+        const block = document.createElement("div");
+        block.className = "network-block";
+        block.innerHTML = `
+          <h4>${netName} (Likely)</h4>
+          <p>${combinedText.trim()}</p>
+        `;
+        resultsDiv.appendChild(block);
+      });
+
+      // (b) Possibly networks
+      if (possiblyNetworks.length > 0) {
+        const possiblySection = document.createElement("div");
+        possiblySection.className = "network-block";
+        possiblySection.innerHTML = `<h4>Possibly Affected Networks</h4>`;
+        const ul = document.createElement("ul");
+        ul.className = "possibly-list";
+        possiblyNetworks.forEach(net => {
+          const li = document.createElement("li");
+          li.textContent = net;
+          ul.appendChild(li);
+        });
+        possiblySection.appendChild(ul);
+        resultsDiv.appendChild(possiblySection);
+      }
+
+      // 3) List all possible tests for each Likely network
+      let allTests = [];
+      likelyNetworks.forEach(item => {
+        const netName = item.netName;
+        if (testCatalog[netName]) {
+          testCatalog[netName].forEach(t => {
+            allTests.push({ 
+              network: netName,
+              name: t.name,
+              duration: t.duration,
+              desc: t.desc
+            });
+          });
+        }
+      });
+
+      if (allTests.length > 0) {
+        // 4) Output these tests in a subtle gray background
+        const testSection = document.createElement("div");
+        testSection.className = "test-section";
+        testSection.innerHTML = `<h4>Neurocognitive Testing Options</h4>`;
+
+        let html = "<ul>";
+        allTests.forEach(t => {
+          html += `<li><strong>${t.name}</strong> (${t.duration} min) - [${t.network}]</li>`;
+        });
+        html += "</ul>";
+
+        testSection.innerHTML += html;
+
+        // Battery choice (Short/Medium/Long) side-by-side
+        const choiceDiv = document.createElement("div");
+        choiceDiv.className = "battery-choice";
+        choiceDiv.innerHTML = `
+          <button class="battery-btn" data-choice="short">SHORT</button>
+          <button class="battery-btn" data-choice="medium">MEDIUM</button>
+          <button class="battery-btn" data-choice="long">LONG</button>
+          <button class="design-battery-btn" id="designBatteryBtn">DESIGN MY NEUROCOG BATTERY</button>
+        `;
+        testSection.appendChild(choiceDiv);
+
+        // battery output container
+        const batteryDiv = document.createElement("div");
+        batteryDiv.className = "battery-output";
+        testSection.appendChild(batteryDiv);
+
+        // Event listener for battery choice highlight
+        const batteryButtons = choiceDiv.querySelectorAll(".battery-btn");
+        let selectedChoice = null;
+        batteryButtons.forEach(btn => {
+          btn.addEventListener("click", () => {
+            // remove .selected from all
+            batteryButtons.forEach(b => b.classList.remove("selected"));
+            // add to this one
+            btn.classList.add("selected");
+            selectedChoice = btn.getAttribute("data-choice");
+          });
+        });
+
+        // "Design my neurocog battery" event
+        const designBatteryBtn = choiceDiv.querySelector("#designBatteryBtn");
+        designBatteryBtn.addEventListener("click", () => {
+          if (!selectedChoice) {
+            batteryDiv.innerHTML = `<p>Please select SHORT, MEDIUM, or LONG first.</p>`;
+            return;
+          }
+          const recommended = generateBattery(likelyNetworks.map(x => x.netName), selectedChoice);
+          if (!recommended || !recommended.length) {
+            batteryDiv.innerHTML = `<p>No recommended tests found.</p>`;
+          } else {
+            // Summation of durations
+            const totalTime = recommended.reduce((acc, r) => acc + r.duration, 0);
+            // Build bullet list
+            let bhtml = "<ul>";
+            recommended.forEach(r => {
+              bhtml += `<li><strong>${r.name}</strong> (${r.duration} min) - [${r.network}]</li>`;
+            });
+            bhtml += "</ul>";
+
+            // Then show extended details
+            let detailHtml = "";
+            recommended.forEach(r => {
+              detailHtml += `
+                <p><strong>${r.name}</strong> (${r.duration} min): ${r.desc}</p>
+              `;
+            });
+
+            batteryDiv.innerHTML = `
+              <p class="total-time">Estimated total time: ${totalTime} minutes</p>
+              ${bhtml}
+              <div class="test-details">${detailHtml}</div>
+            `;
+          }
+        });
+
+        resultsDiv.appendChild(testSection);
+      }
+
+      // Finally, append results
+      document.getElementById("infoPanel").appendChild(resultsDiv);
+    });
+
+    /***************************************************************
+     * 7. GENERATE BATTERY FUNCTION
+     *    - short => pick shortest test
+     *    - long => pick longest
+     *    - medium => pick the "middle" test in ascending order
+     ***************************************************************/
+    function generateBattery(networkNames, choice) {
+      const result = [];
+      networkNames.forEach(netName => {
+        const tests = testCatalog[netName];
+        if (!tests) return;
+        // sort by duration
+        const sorted = [...tests].sort((a, b) => a.duration - b.duration);
+        let picked = null;
+        if (choice === "short") {
+          picked = sorted[0]; // shortest
+        } else if (choice === "long") {
+          picked = sorted[sorted.length - 1]; // longest
+        } else if (choice === "medium") {
+          if (sorted.length === 1) {
+            picked = sorted[0];
+          } else {
+            const midIndex = Math.floor(sorted.length / 2);
+            picked = sorted[midIndex];
+          }
+        }
+        if (picked) {
+          result.push({
+            network: netName,
+            name: picked.name,
+            duration: picked.duration,
+            desc: picked.desc
+          });
+        }
+      });
+      return result;
+    }
+  </script>
+</body>
+</html>
